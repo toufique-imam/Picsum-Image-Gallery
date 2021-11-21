@@ -1,0 +1,48 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/posterOverlayShareButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="6dp"-->
+<!--        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--        android:padding="6dp"-->
+<!--        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/posterOverlayCastButton"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/posterOverlayCastButton"-->
+<!--        app:srcCompat="@drawable/ic_outline_share_24"-->
+<!--        tools:ignore="ContentDescription" />-->
+
+    <ImageView
+        android:id="@+id/posterOverlayBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="6dp"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/posterOverlayDescriptionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/TransparentBlack"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</merge>
