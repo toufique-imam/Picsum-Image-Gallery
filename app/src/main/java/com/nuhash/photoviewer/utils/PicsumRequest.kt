@@ -24,6 +24,7 @@ class PicsumRequest(val context: Context, private var url: String) {
     }
 
     fun startScrapping() {
+        //check cached url response
         val savedData = textFileUtils.getSavedM3UFile(url)
         logger("saved", savedData)
         if (savedData.isNotEmpty()) {
@@ -36,6 +37,7 @@ class PicsumRequest(val context: Context, private var url: String) {
         val localData = CustomRequest(
             Request.Method.GET, url, headers,
             { response ->
+                //cache url response
                 textFileUtils.saveM3UFile(url, response)
                 onComplete.onComplete(response)
             },

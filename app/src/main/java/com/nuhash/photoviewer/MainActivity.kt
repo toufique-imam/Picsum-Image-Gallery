@@ -1,10 +1,11 @@
 package com.nuhash.photoviewer
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.nuhash.photoviewer.adapter.GalleryAdapter
 import com.nuhash.photoviewer.model.ImageModel
@@ -14,16 +15,16 @@ import com.nuhash.photoviewer.utils.PicsumRequest
 import com.nuhash.photoviewer.view.ImageOverlayView
 import com.stfalcon.imageviewer.StfalconImageViewer
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var gallery: RecyclerView
     lateinit var galleryAdapter: GalleryAdapter
     lateinit var gridLayoutManager: GridLayoutManager
     var pageNow = 0
     lateinit var picsumRequest: PicsumRequest
     lateinit var onScrappingCompleted: OnScrappingCompleted
-    lateinit var mRefreshLayout: SwipeRefreshLayout
     val listLoadMore = ArrayList<ImageModel>()
     var overlayView: ImageOverlayView? = null
+    lateinit var progressBar: ProgressBar
     var imageViewer: StfalconImageViewer<ImageModel>? = null
     var prevsize: Int = -1
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         onScrappingCompleted = object : OnScrappingCompleted {
             override fun onComplete(response: String) {
                 isLoading = false
-                mRefreshLayout.isRefreshing = false
+                progressBar.visibility = View.GONE
                 if (safeGet(prevsize) && listLoadMore.get(prevsize).title == GalleryAdapter.LOADING_TEXT) {
                     listLoadMore.removeAt(prevsize)
                     galleryAdapter.removeData(prevsize)
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onError() {
                 isLoading = false
-                mRefreshLayout.isRefreshing = false
+                progressBar.visibility = View.GONE
             }
         }
         picsumRequest = PicsumRequest(this, "")
@@ -62,8 +63,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun initView() {
         gallery = findViewById(R.id.rcv_movies)
-        mRefreshLayout = findViewById(R.id.swipe_refresh)
-        mRefreshLayout.setOnRefreshListener(this)
+        progressBar = findViewById(R.id.progress_bar)
         initPicsum()
 
         initRecyclerView()
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun loadImages() {
         pageNow++
-        mRefreshLayout.isRefreshing = true
+        progressBar.visibility = View.VISIBLE
         val linkNow = "https://picsum.photos/v2/list?page=$pageNow&limit=100"
         picsumRequest.updateUrl(linkNow)
 
@@ -143,14 +143,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         galleryAdapter.onAddData(GalleryAdapter.imageModelDummy)
 
         picsumRequest.startScrapping()
-    }
-
-    override fun onRefresh() {
-        pageNow = 0
-        listLoadMore.clear()
-        galleryAdapter.mList.clear()
-        galleryAdapter.notifyDataSetChanged()
-        loadImages()
     }
 
     override fun onLowMemory() {
