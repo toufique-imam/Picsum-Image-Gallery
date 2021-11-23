@@ -17,7 +17,7 @@ Browse list of photos and view it in full screen
 
 # Screenshots
 Landing View<br>
-<a href="./images/1.png"><img src="./images/1.png" width="30%" /></a>
+<a href="./images/1.png"><img src="./images/1.png" width="30%" /></a><br>
 Full screen Image view<br>
 <a href="./images/2.png"><img src="./images/2.png" width="30%" /></a>
 <a href="./images/3.png"><img src="./images/3.png" width="30%" /></a><br>
