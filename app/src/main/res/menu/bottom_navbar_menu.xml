@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_download"
+        android:icon="@drawable/ic_baseline_save_alt_24"
+        android:title="@string/download" />
+
+    <item
+        android:id="@+id/menu_shareLink"
+        android:icon="@drawable/ic_baseline_link_24"
+        android:title="@string/create_link" />
+
+    <item
+        android:id="@+id/menu_shareImage"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="@string/share_image" />
+
+</menu>

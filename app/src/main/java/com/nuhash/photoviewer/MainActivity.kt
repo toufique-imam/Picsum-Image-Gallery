@@ -1,5 +1,7 @@
 package com.nuhash.photoviewer
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -9,11 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nuhash.photoviewer.adapter.GalleryAdapter
 import com.nuhash.photoviewer.model.ImageModel
-import com.nuhash.photoviewer.utils.OnScrappingCompleted
-import com.nuhash.photoviewer.utils.Parser
-import com.nuhash.photoviewer.utils.PicsumRequest
+import com.nuhash.photoviewer.utils.*
 import com.nuhash.photoviewer.view.ImageOverlayView
 import com.stfalcon.imageviewer.StfalconImageViewer
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var gallery: RecyclerView
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var progressBar: ProgressBar
     var imageViewer: StfalconImageViewer<ImageModel>? = null
     var prevsize: Int = -1
+
 
     var isLoading = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +67,27 @@ class MainActivity : AppCompatActivity() {
         gallery = findViewById(R.id.rcv_movies)
         progressBar = findViewById(R.id.progress_bar)
         initPicsum()
-
         initRecyclerView()
-
+        //initAlertDialog()
         loadImages()
     }
+
+    private fun downloadImage() {
+        Downloader.stateDownload(this, imageModelNow, false)
+    }
+
+    private fun shareLink() {
+        val intent = Intent(Intent.ACTION_SEND)
+        val myUri = Uri.parse(imageModelNow.link)
+        intent.putExtra(Intent.EXTRA_TEXT, myUri)
+        startActivity(Intent.createChooser(intent, "Share link"))
+    }
+
+    private fun shareImage() {
+        CommonFunction.logger("LINK", imageModelNow.link)
+        Downloader.stateDownload(this, imageModelNow, true)
+    }
+
 
     private fun setupImageOverlay(position: Int) {
         overlayView = ImageOverlayView(this).apply {
@@ -79,11 +97,20 @@ class MainActivity : AppCompatActivity() {
                 imageViewer?.close()
                 imageViewer = null
             }
+            onMenuClick = {
+                when (it) {
+                    0 -> downloadImage()
+                    1 -> shareLink()
+                    2 -> shareImage()
+                }
+            }
         }
     }
 
     private fun showImages(position: Int) {
+        imageModelNow = galleryAdapter.mList[position]
         setupImageOverlay(position)
+
         imageViewer = StfalconImageViewer.Builder(this, galleryAdapter.mList)
         { view, imageNow ->
             Glide.with(view).load(imageNow.link).skipMemoryCache(true).into(view)
@@ -91,11 +118,14 @@ class MainActivity : AppCompatActivity() {
             if (it + 15 >= galleryAdapter.mList.size) {
                 loadImages()
             }
+            imageModelNow = galleryAdapter.mList[it]
             overlayView?.update(galleryAdapter.mList[it])
         }.withStartPosition(position)
             .withHiddenStatusBar(true)
             .withOverlayView(overlayView).show()
     }
+
+    var imageModelNow = ImageModel()
 
 
     private fun initRecyclerView() {

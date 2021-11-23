@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_layout_bottom_sheet"
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/material_button_download_bs"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Download"
+        app:icon="@drawable/ic_baseline_save_alt_24"
+        app:iconGravity="textStart"
+        app:iconPadding="5dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/material_button_link_bs"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Create link"
+        app:icon="@drawable/ic_baseline_link_24"
+        app:iconGravity="textStart"
+        app:iconPadding="5dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/material_button_image_bs"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Share Image"
+        app:icon="@drawable/ic_baseline_share_24"
+        app:iconGravity="textStart"
+        app:iconPadding="5dp" />
+
+
+</LinearLayout>

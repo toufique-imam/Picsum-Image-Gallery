@@ -13,14 +13,15 @@
         android:layout_height="wrap_content"
         android:descendantFocusability="afterDescendants"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        tools:listitem="@layout/item_gallery">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <ProgressBar
-        android:visibility="gone"
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
