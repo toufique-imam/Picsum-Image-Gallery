@@ -8,9 +8,10 @@ Browse list of photos and view it in full screen
 - on demand loading / infinity scroll
 - cached images in disk space
 - cached api response
+- download image
+- share image
+- share link
 
 # TODO
 - add screenshots
-- add save options
-- add share options
 - unit test
