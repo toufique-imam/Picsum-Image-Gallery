@@ -3,8 +3,6 @@ package com.nuhash.photoviewer
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -14,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nuhash.photoviewer.adapter.GalleryAdapter
 import com.nuhash.photoviewer.model.ImageModel
+import com.nuhash.photoviewer.model.ProgressListener
 import com.nuhash.photoviewer.utils.*
 import com.nuhash.photoviewer.utils.CommonFunction.toaster
 import com.nuhash.photoviewer.view.ImageOverlayView
@@ -70,6 +69,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    lateinit var progressListener: ProgressListener
+
     private fun initView() {
         gallery = findViewById(R.id.rcv_movies)
         progressBar = findViewById(R.id.progress_bar)
@@ -77,10 +78,31 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         //initAlertDialog()
         loadImages()
+        progressListener = object : ProgressListener {
+            override fun onProgressUpdate(percent: Int) {
+                overlayView?.progressBar?.progress = percent
+            }
+
+            override fun onDownloadDone() {
+                overlayView?.isWorking = false
+                overlayView?.progressBar?.visibility = View.GONE
+                toaster(this@MainActivity, "Loading Finished")
+            }
+
+            override fun onDownloadStarted() {
+                overlayView?.progressBar?.max = 100
+                overlayView?.progressBar?.visibility = View.VISIBLE
+                overlayView?.progressBar?.isIndeterminate = true
+                overlayView?.progressBar?.progress = 0
+                overlayView?.isWorking = true
+            }
+
+        }
+
     }
 
     private fun downloadImage() {
-        Downloader.stateDownload(this, imageModelNow, false)
+        Downloader.stateDownload(this, imageModelNow, false, progressListener)
     }
 
     private fun shareLink() {
@@ -96,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun shareImage() {
         CommonFunction.logger("LINK", imageModelNow.link)
-        Downloader.stateDownload(this, imageModelNow, true)
+        Downloader.stateDownload(this, imageModelNow, true, progressListener)
     }
 
 

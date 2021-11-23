@@ -1,7 +1,9 @@
 package com.nuhash.photoviewer.utils
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import me.drakeet.support.toast.ToastCompat
 

@@ -37,6 +37,14 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress_bar_downloading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:max="100" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"

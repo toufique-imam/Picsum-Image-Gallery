@@ -12,11 +12,17 @@ import android.os.Environment
 import androidx.core.content.FileProvider
 import com.nuhash.photoviewer.BuildConfig
 import com.nuhash.photoviewer.model.ImageModel
+import com.nuhash.photoviewer.model.ProgressListener
 import com.nuhash.photoviewer.utils.CommonFunction.logger
 import java.io.File
 
 object Downloader {
-    fun stateDownload(activity: Activity, imageModel: ImageModel, shareImage: Boolean) {
+    fun stateDownload(
+        activity: Activity,
+        imageModel: ImageModel,
+        shareImage: Boolean,
+        progressListener: ProgressListener
+    ) {
         val manager: DownloadManager =
             activity.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val savedImagePath =
@@ -32,13 +38,55 @@ object Downloader {
             imageFileName
         )
         val outputFile = File(savedImagePath, imageFileName)
-        if (outputFile.exists()) outputFile.delete()
+        if (outputFile.exists()) {
+            progressListener.onDownloadDone()
+            if (shareImage)
+                shareImageIntent(activity, imageModel)
+            return
+        }
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
         val downloadManagerId = manager.enqueue(request)
+        progressListener.onDownloadStarted()
         if (shareImage) {
             afterDownload(downloadManagerId, manager, activity, imageModel)
         }
+        Thread {
+            while (true) {
+                try {
+                    val q = DownloadManager.Query()
+                    q.setFilterById(downloadManagerId)
+                    val cursor = manager.query(q)
+                    cursor.moveToFirst()
+                    val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                    if (cursor.getInt(columnIndex) == DownloadManager.STATUS_SUCCESSFUL) {
+                        break
+                    } else if (cursor.getInt(columnIndex) == DownloadManager.STATUS_FAILED) {
+                        break
+                    }
+                    val columnBytes =
+                        cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                    val bytes_download = cursor.getInt(columnBytes)
+                    val columnTotal = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                    val bytes_total = cursor.getInt(columnTotal)
+                    val dl_progress = (bytes_download * 100L) / bytes_total
+
+                    activity.runOnUiThread {
+                        progressListener.onProgressUpdate(dl_progress.toInt())
+                    }
+                    cursor.close()
+                } catch (e: Exception) {
+                    logger("download", e.message)
+                    activity.runOnUiThread {
+                        progressListener.onDownloadDone()
+                    }
+                }
+            }
+            activity.runOnUiThread {
+                progressListener.onDownloadDone()
+            }
+
+        }.start()
     }
 
     private fun afterDownload(
@@ -59,7 +107,7 @@ object Downloader {
                         val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
                         if (DownloadManager.STATUS_SUCCESSFUL == cursor.getInt(columnIndex)) {
                             logger("DOWNLOAD", "" + dm.getUriForDownloadedFile(downloadId))
-                            shareImage(activity, imageModel)
+                            shareImageIntent(activity, imageModel)
                         }
                     }
                     cursor.close()
@@ -71,7 +119,7 @@ object Downloader {
         activity.registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
 
-    private fun shareImage(activity: Activity, imageModel: ImageModel) {
+    private fun shareImageIntent(activity: Activity, imageModel: ImageModel) {
         val savedImagePath =
             activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
         val imageFileName =
