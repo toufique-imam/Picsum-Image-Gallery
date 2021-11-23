@@ -11,6 +11,4 @@ Browse list of photos and view it in full screen
 
 # TODO
 - add screenshots
-- add save options
-- add share options
 - unit test
