@@ -1,5 +1,8 @@
 package com.nuhash.photoviewer
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.nuhash.photoviewer.adapter.GalleryAdapter
 import com.nuhash.photoviewer.model.ImageModel
 import com.nuhash.photoviewer.utils.*
+import com.nuhash.photoviewer.utils.CommonFunction.toaster
 import com.nuhash.photoviewer.view.ImageOverlayView
 import com.stfalcon.imageviewer.StfalconImageViewer
 
@@ -28,12 +32,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var progressBar: ProgressBar
     var imageViewer: StfalconImageViewer<ImageModel>? = null
     var prevsize: Int = -1
+    lateinit var clipboardManager: ClipboardManager
 
 
     var isLoading = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        clipboardManager =
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         initView()
     }
 
@@ -77,10 +84,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun shareLink() {
-        val intent = Intent(Intent.ACTION_SEND)
-        val myUri = Uri.parse(imageModelNow.link)
-        intent.putExtra(Intent.EXTRA_TEXT, myUri)
-        startActivity(Intent.createChooser(intent, "Share link"))
+        val clip = ClipData.newPlainText(imageModelNow.title, imageModelNow.link)
+        clipboardManager.setPrimaryClip(clip)
+        toaster(this, "copied to clipboard")
+//        val intent = Intent(Intent.ACTION_VIEW)
+//        val myUri = Uri.parse(imageModelNow.link)
+//        intent.data = myUri
+//        //intent.putExtra(Intent.EXTRA_TEXT, myUri)
+//        startActivity(Intent.createChooser(intent, "Share link"))
     }
 
     private fun shareImage() {

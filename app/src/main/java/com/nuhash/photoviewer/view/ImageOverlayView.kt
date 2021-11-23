@@ -22,7 +22,6 @@ class ImageOverlayView @JvmOverloads constructor(
 
     //    var shareButton: ImageView
     var backButton: ImageView
-    var menuButton: ImageView
     var author: TextView
     var bottomNavigationView: BottomNavigationView
 
@@ -31,7 +30,6 @@ class ImageOverlayView @JvmOverloads constructor(
 //        shareButton = findViewById(R.id.posterOverlayShareButton)
         author = findViewById(R.id.posterOverlayAuthor)
         backButton = findViewById(R.id.posterOverlayBackButton)
-        menuButton = findViewById(R.id.posterOverlayMenuButton)
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
         setBackgroundColor(Color.TRANSPARENT)
     }

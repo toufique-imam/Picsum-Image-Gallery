@@ -35,20 +35,6 @@
             android:text="nice author"
             android:textColor="@color/white" />
 
-        <ImageView
-            android:id="@+id/posterOverlayMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="end"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="18dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="6dp"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
-            app:srcCompat="@drawable/ic_baseline_more_vert_24"
-            tools:ignore="ContentDescription" />
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
