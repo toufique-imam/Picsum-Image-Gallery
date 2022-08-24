@@ -1,5 +1,14 @@
 # Picsum-Image-Gallery
-Browse list of photos and view it in full screen 
+
+[Iftekher Toufique Imam](https://www.github.com/toufique-imam)
+
+---
+
+[![GitHub Stars](https://img.shields.io/github/stars/toufique-imam/Picsum-Image-Gallery?style=social)](https://github.com/caojiezhang/DAVSR)
+[![download](https://img.shields.io/github/downloads/toufique-imam/Picsum-Image-Gallery/total.svg)](https://github.com/caojiezhang/DAVSR/releases)
+![visitors](https://visitor-badge.glitch.me/badge?page_id=toufique-imam/Picsum-Image-Gallery)
+
+- Browse list of photos and view it in full screen 
 - view images in gallery
 - view images in full screen
 - zoom in/out images
